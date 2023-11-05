@@ -5,47 +5,27 @@ const productos = [
     { id: 4, nombre: "Monitor Gigabyte", precio: 100000, imagen: "../img/monitor.jpg" }
 ];
 
-const disponibles = ["Teclado Redragon Kumara", "Auriculares Hyperx", "Mouse Logitech G305", "Monitor Gigabyte"];
+const disponibles = ["Teclado", "Auriculares", "Mouse", "Monitor"];
 
-const nombreInput = document.getElementById("nombreInput");
-const saludarButton = document.getElementById("saludarButton");
 const productosContainer = document.getElementById("productosContainer");
 const productosDisponibles = document.getElementById("productosDisponibles");
 const carrito = document.getElementById("carrito");
 const carritoProductos = document.getElementById("carritoProductos");
 const totalCarrito = document.getElementById("totalCarrito");
-const verificarCarrito = document.getElementById("verificarCarrito");
+const eliminarCarritoButton = document.getElementById("eliminarCarrito");
+const confirmarPagoButton = document.getElementById("confirmarPago");
 
-saludarButton.addEventListener("click", () => {
-    const nombre = nombreInput.value;
-    if (nombre) {
-        saludar(nombre);
-        productosDisponibles.style.display = "block";
-        mostrarProductos();
-    } else {
-        alert("Por favor, ingresa tu nombre.");
-    }
-});
-
-function mostrarCarrito() {
-    carrito.style.display = "block";
-}
-
-verificarCarrito.addEventListener("click", () => {
-    mostrarCarrito();
-});
-
-function saludar(nombre) {
-    alert(`¡Hola ${nombre}!`);
-}
+mostrarProductos();
 
 function mostrarProductos() {
     for (const producto of productos) {
         const productoDiv = document.createElement("div");
         productoDiv.innerHTML = `
             <p>${producto.nombre}</p>
-            <b>$${producto.precio}</b>
             <img src="${producto.imagen}" alt="Imagen de ${producto.nombre}">
+            <br>
+            <b>$${producto.precio}</b>
+            <br>
             <button class="agregarCarrito" data-producto='${JSON.stringify(producto)}'>Agregar al Carrito</button>
             <hr />
         `;
@@ -63,5 +43,30 @@ function agregarAlCarrito(producto) {
     carritoProductos.innerHTML += `<li>${producto.nombre} - $${producto.precio}</li>`;
     const totalActual = parseInt(totalCarrito.textContent);
     totalCarrito.textContent = totalActual + producto.precio;
+    alert("Su producto fue agregado al carrito!");
+}
+
+eliminarCarritoButton.addEventListener("click", () => {
+    eliminarCarrito();
+    carrito.style.display = "none";
+});
+
+confirmarPagoButton.addEventListener("click", () => {
+    confirmarPago();
+});
+
+function mostrarCarrito() {
+    carrito.style.display = "block";  
+}
+
+function eliminarCarrito() {
+    carritoProductos.innerHTML = ""; 
+    totalCarrito.textContent = "0";  
+    window.location.reload();   
+}
+
+function confirmarPago() {
+    alert(`¡Su pago por $${totalCarrito.textContent} ha sido confirmado! Gracias por tu compra.`);
+    window.location.reload();
 }
 

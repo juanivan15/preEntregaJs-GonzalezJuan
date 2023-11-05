@@ -1,10 +1,23 @@
 body{
     background-color: bisque;
     color: black;
-    font-size: 3rem;
     text-align: center;
 }
+h1{
+    font-size: 3rem;
+}
+p{
+    font-size: 1.5rem;
+}
 img{
-    width: 400;
-    height: 400;
+    background-color: antiquewhite;
+    width: 200px;
+    height: 200px;
+}
+button{
+    background-color: antiquewhite;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    border: 5px solid black;
 }
