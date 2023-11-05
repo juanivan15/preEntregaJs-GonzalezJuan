@@ -14,6 +14,14 @@ const carritoProductos = document.getElementById("carritoProductos");
 const totalCarrito = document.getElementById("totalCarrito");
 const eliminarCarritoButton = document.getElementById("eliminarCarrito");
 const confirmarPagoButton = document.getElementById("confirmarPago");
+const buscadorInput = document.getElementById("buscadorInput");
+const buscarBoton = document.getElementById("buscarBoton");
+const resultadosBusqueda = document.getElementById("resultadosBusqueda");
+
+buscarBoton.addEventListener("click", function () {
+    const terminoDeBusqueda = buscadorInput.value.toLowerCase();
+    realizarBusqueda(terminoDeBusqueda);
+});
 
 mostrarProductos();
 
@@ -68,5 +76,19 @@ function eliminarCarrito() {
 function confirmarPago() {
     alert(`¡Su pago por $${totalCarrito.textContent} ha sido confirmado! Gracias por tu compra.`);
     window.location.reload();
+}
+
+function realizarBusqueda(termino) {
+    resultadosBusqueda.innerHTML = "";
+    const resultados = disponibles.filter(producto => producto.toLowerCase().includes(termino));
+    if (resultados.length === 0) {
+        resultadosBusqueda.innerHTML = "<li>No se encontraron resultados.</li>";
+    } else {
+        resultados.forEach(resultado => {
+            const itemResultado = document.createElement("li");
+            itemResultado.textContent = "El producto se encuentra disponible";
+            resultadosBusqueda.appendChild(itemResultado);
+        });
+    }
 }
 

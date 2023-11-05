@@ -6,7 +6,11 @@
 </head>
 <body>
     <h1>Tienda de Accesorios Gamer</h1>
-    <p>Bienvenido a nuestra tienda de accesorios gamer.</p>
+    <p>Bienvenido a nuestra tienda de accesorios gamer. Su carrito se encuentra al final de la pagina.</p>
+
+    <input type="text" id="buscadorInput" placeholder="Buscar productos">
+    <button id="buscarBoton">Buscar</button>
+    <ul id="resultadosBusqueda"></ul>
 
     <div id="productosDisponibles">
         <h2>Productos Disponibles</h2>
@@ -17,7 +21,7 @@
         <h2>Tu Carrito</h2>
         <ul id="carritoProductos"></ul>
         <p>Total: $<span id="totalCarrito">0</span></p>
-        <button id="eliminarCarrito">Eliminar Carrito</button>
+        <button id="eliminarCarrito" class="eliminar">Eliminar Carrito</button>
         <button id="confirmarPago">Confirmar Pago</button>
     </div>
 
