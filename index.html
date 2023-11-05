@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venta de accesorios gamer</title>
+    <title>Tienda de Accesorios Gamer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Compra de accesorios gamer</h1>
-    <h2>Productos disponibles:</h2>
+    <h1>Tienda de Accesorios Gamer</h1>
+    <p>Bienvenido a nuestra tienda de accesorios gamer. Ingresa tu nombre para comenzar.</p>
+    <input type="text" id="nombreInput" placeholder="Tu nombre">
+    <button id="saludarButton">Saludar</button>
+
+    <div id="productosDisponibles">
+        <h2>Productos Disponibles</h2>
+        <div id="productosContainer"></div>
+    </div>
+
+    <div id="carrito">
+        <h2>Tu Carrito</h2>
+        <ul id="carritoProductos"></ul>
+        <p>Total: $<span id="totalCarrito">0</span></p>
+        <button id="verificarCarrito">Verificar Carrito</button>
+    </div>
+
     <script src="main.js"></script>
 </body>
 </html>

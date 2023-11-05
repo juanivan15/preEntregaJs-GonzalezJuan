@@ -1,109 +1,67 @@
-let precioProducto;
-let total = 0;
-let nombre = prompt("Bienvenido! Ingresá tu nombre:");
-let saludo = "Hola";
-let continuarCompra = true;
-let productost = "";
-
-function saludar(saludo, nombre) {
-    alert(`${saludo} ${nombre}!`);
-}
-
-saludar(saludo, nombre);
-
-let suma = 0;
-
-function sumar(a, b) {
-    suma = a + b;
-    return suma;
-}
-
-let productos = [
-    { id: 1, nombre: "Teclado Redragon Kumara", precio: 40000, imagen: "../img/teclado.jpg" },
+const productos = [
+    { id: 1, nombre: "Teclado Redragon Kumara", precio: 40000, imagen: "../img/teclado.jpg"},
     { id: 2, nombre: "Auriculares Hyperx", precio: 50000, imagen: "../img/auris.webp" },
     { id: 3, nombre: "Mouse Logitech G305", precio: 25000, imagen: "../img/mouse.jpg" },
     { id: 4, nombre: "Monitor Gigabyte", precio: 100000, imagen: "../img/monitor.jpg" }
 ];
 
-function mostrarProductos() {
-    for (producto of productos) {
-        let div = document.createElement("div");
-        div.innerHTML = `
-          <p>${producto.nombre}</p>
-          <b>$${producto.precio}</b>
-          <img src="${producto.imagen}" alt="Imagen de ${producto.nombre}">
-          <hr />
-        `;
-        document.body.append(div);
-    }
-}
+const disponibles = ["Teclado Redragon Kumara", "Auriculares Hyperx", "Mouse Logitech G305", "Monitor Gigabyte"];
 
-alert(`Bienvenido a nuestra tienda de accesorios gamer!`);
+const nombreInput = document.getElementById("nombreInput");
+const saludarButton = document.getElementById("saludarButton");
+const productosContainer = document.getElementById("productosContainer");
+const productosDisponibles = document.getElementById("productosDisponibles");
+const carrito = document.getElementById("carrito");
+const carritoProductos = document.getElementById("carritoProductos");
+const totalCarrito = document.getElementById("totalCarrito");
+const verificarCarrito = document.getElementById("verificarCarrito");
 
-const disponibles = ["teclado", "mouse", "auricular", "monitor"];
-
-let disp = prompt("Ingresá el nombre del producto que te gustaría comprar para saber si está disponible en nuestra tienda.");
-
-if (disponibles.includes(disp)) {
-   alert("El producto está disponible. Continuá tu compra");
-
-       while (continuarCompra) {
-       let opcion = Number(prompt(`Ingresá el número del producto que deseas agregar al carrito:
-        1-Auriculares Hyperx $50000;
-        2-Teclado Redragon Kumara $40000;
-        3-Mouse Logitech G305 $25000;
-        4-Monitor Gigabyte $100000.
-        Si deseas salir o ver tu carrito de compras, ingresá el número 9`));
-        switch (opcion) {
-            case 1:
-                alert("Agregaste Auriculares Hyperx al carrito");
-                productost += "Auriculares Hyperx\n";
-                precioProducto = 50000;
-                total = sumar(total, precioProducto);
-                break;
-            case 2:
-                alert("Agregaste Teclado Redragon Kumara al carrito");
-                productost += "Teclado Redragon Kumara\n";
-                precioProducto = 40000;
-                total = sumar(total, precioProducto);
-                break;
-            case 3:
-                alert("Agregaste Mouse Logitech G305 al carrito");
-                productost += "Mouse Logitech G305\n";
-                precioProducto = 25000;
-                total = sumar(total, precioProducto);
-                break;
-            case 4:
-                alert("Agregaste Monitor Gigabyte al carrito");
-                productost += "Monitor Gigabyte\n";
-                precioProducto = 100000;
-                total = sumar(total, precioProducto);
-                break;
-            case 9:
-                continuarCompra = false;
-                break;
-            default:
-                alert("Opción incorrecta. Por favor ingresá un número nuevamente.");
-                break;
-        }
-    }
-
-    if (productost === "") {
-        alert("Tu carrito está vacío");
+saludarButton.addEventListener("click", () => {
+    const nombre = nombreInput.value;
+    if (nombre) {
+        saludar(nombre);
+        productosDisponibles.style.display = "block";
+        mostrarProductos();
     } else {
-        alert(`Productos en el carrito:\n${productost}`);
-        alert(`El total de su compra es $${total}`);
+        alert("Por favor, ingresa tu nombre.");
     }
+});
+
+function mostrarCarrito() {
+    carrito.style.display = "block";
 }
-else {
-      alert("Lamentamos no contar con ese producto en este momento. Por favor volvé pronto.");
+
+verificarCarrito.addEventListener("click", () => {
+    mostrarCarrito();
+});
+
+function saludar(nombre) {
+    alert(`¡Hola ${nombre}!`);
 }
 
-alert("Gracias por utilizar nuestra página");
-alert(`Nos vemos ${nombre}`);
+function mostrarProductos() {
+    for (const producto of productos) {
+        const productoDiv = document.createElement("div");
+        productoDiv.innerHTML = `
+            <p>${producto.nombre}</p>
+            <b>$${producto.precio}</b>
+            <img src="${producto.imagen}" alt="Imagen de ${producto.nombre}">
+            <button class="agregarCarrito" data-producto='${JSON.stringify(producto)}'>Agregar al Carrito</button>
+            <hr />
+        `;
+        productosContainer.appendChild(productoDiv);
+    }
+    productosContainer.querySelectorAll(".agregarCarrito").forEach((boton) => {
+        boton.addEventListener("click", () => {
+            const producto = JSON.parse(boton.getAttribute("data-producto"));
+            agregarAlCarrito(producto);
+        });
+    });
+}
 
-mostrarProductos();
-
-
-
+function agregarAlCarrito(producto) {
+    carritoProductos.innerHTML += `<li>${producto.nombre} - $${producto.precio}</li>`;
+    const totalActual = parseInt(totalCarrito.textContent);
+    totalCarrito.textContent = totalActual + producto.precio;
+}
 
