@@ -3,8 +3,8 @@
 *{
     font-family: 'Raleway', sans-serif;
 }
-body{
-    background-color: white;
+body {
+    background-color: #f8f8f8;
     color: black;
     text-align: center;
 }
@@ -31,4 +31,7 @@ button:hover{
 }
 .eliminar:hover{
     background-color: red;
+}
+li{
+    list-style: none;
 }

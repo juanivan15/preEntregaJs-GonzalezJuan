@@ -18,6 +18,10 @@ const buscadorInput = document.getElementById("buscadorInput");
 const buscarBoton = document.getElementById("buscarBoton");
 const resultadosBusqueda = document.getElementById("resultadosBusqueda");
 
+
+let carritoEnLocalStorage = JSON.parse(localStorage.getItem("carrito")) || [];
+actualizarCarritoEnPantalla();
+
 buscarBoton.addEventListener("click", function () {
     const terminoDeBusqueda = buscadorInput.value.toLowerCase();
     realizarBusqueda(terminoDeBusqueda);
@@ -48,15 +52,20 @@ function mostrarProductos() {
 }
 
 function agregarAlCarrito(producto) {
-    carritoProductos.innerHTML += `<li>${producto.nombre} - $${producto.precio}</li>`;
-    const totalActual = parseInt(totalCarrito.textContent);
-    totalCarrito.textContent = totalActual + producto.precio;
+    carritoEnLocalStorage.push(producto);
+    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+    actualizarCarritoEnPantalla();
     alert("Su producto fue agregado al carrito!");
+}
+
+function eliminarProductoDelCarrito(index) {
+    carritoEnLocalStorage.splice(index, 1);
+    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+    actualizarCarritoEnPantalla();
 }
 
 eliminarCarritoButton.addEventListener("click", () => {
     eliminarCarrito();
-    carrito.style.display = "none";
 });
 
 confirmarPagoButton.addEventListener("click", () => {
@@ -68,14 +77,16 @@ function mostrarCarrito() {
 }
 
 function eliminarCarrito() {
-    carritoProductos.innerHTML = ""; 
-    totalCarrito.textContent = "0";  
-    window.location.reload();   
+    carritoEnLocalStorage = [];
+    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+    actualizarCarritoEnPantalla();
 }
 
 function confirmarPago() {
     alert(`¡Su pago por $${totalCarrito.textContent} ha sido confirmado! Gracias por tu compra.`);
-    window.location.reload();
+    carritoEnLocalStorage = [];
+    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+    actualizarCarritoEnPantalla();
 }
 
 function realizarBusqueda(termino) {
@@ -92,3 +103,25 @@ function realizarBusqueda(termino) {
     }
 }
 
+function actualizarCarritoEnPantalla() {
+    carritoProductos.innerHTML = "";
+    let totalActual = 0;
+
+    for (let i = 0; i < carritoEnLocalStorage.length; i++) {
+        const producto = carritoEnLocalStorage[i];
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `<label for="producto${i}">${producto.nombre} - $${producto.precio}</label>
+                              <button class="eliminarProducto" data-index="${i}">Eliminar</button>`;
+        carritoProductos.appendChild(listItem);
+        totalActual += producto.precio;
+    }
+
+    totalCarrito.textContent = totalActual;
+
+    carritoProductos.querySelectorAll('.eliminarProducto').forEach((boton) => {
+        boton.addEventListener("click", () => {
+            const index = parseInt(boton.getAttribute("data-index"));
+            eliminarProductoDelCarrito(index);
+        });
+    });
+}
