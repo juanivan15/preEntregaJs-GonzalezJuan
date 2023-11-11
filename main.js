@@ -1,8 +1,8 @@
 const productos = [
-    { id: 1, nombre: "Teclado Redragon Kumara", precio: 40000, imagen: "../img/teclado.jpg"},
-    { id: 2, nombre: "Auriculares Hyperx", precio: 50000, imagen: "../img/auris.webp" },
-    { id: 3, nombre: "Mouse Logitech G305", precio: 25000, imagen: "../img/mouse.jpg" },
-    { id: 4, nombre: "Monitor Gigabyte", precio: 100000, imagen: "../img/monitor.jpg" }
+    { id: 1, nombre: "Teclado Redragon Kumara", precio: 40000, imagen: "./img/teclado.jpg"},
+    { id: 2, nombre: "Auriculares Hyperx", precio: 50000, imagen: "./img/auris.webp" },
+    { id: 3, nombre: "Mouse Logitech G305", precio: 25000, imagen: "./img/mouse.jpg" },
+    { id: 4, nombre: "Monitor Gigabyte", precio: 100000, imagen: "./img/monitor.jpg" }
 ];
 
 const disponibles = ["Teclado", "Auriculares", "Mouse", "Monitor"];
