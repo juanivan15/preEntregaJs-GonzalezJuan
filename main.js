@@ -117,8 +117,9 @@ function mostrarCarrito() {
 }
 
 function eliminarCarrito() {
+  if(totalCarrito.textContent != 0){
     Swal.fire({
-        title: "Estás seguro que quieres eliminar el carrito?",
+        title: "Estás seguro que quieres eliminar los productos del carrito?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -136,15 +137,42 @@ function eliminarCarrito() {
         actualizarCarritoEnPantalla();
         }
       });
-  
+  } else {
+    Swal.fire({
+      title: "No tiene productos en el carrito!",
+      icon: "warning"
+    });
+    }
 }
 
 
 function confirmarPago() {
-  alert(`¡Su pago por $${totalCarrito.textContent} ha sido confirmado! Gracias por tu compra.`);
-  carritoEnLocalStorage = [];
-  localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
-  actualizarCarritoEnPantalla();
+  if(totalCarrito.textContent != 0){
+    Swal.fire({
+      title: "Quieres confirmar la compra?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "green",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, confirmar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `¡Su pago por $${totalCarrito.textContent} ha sido confirmado! Gracias por tu compra.`,
+          text: "Vuelva pronto.",
+          icon: "success"
+      });
+      carritoEnLocalStorage = [];
+      localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+      actualizarCarritoEnPantalla();
+      }
+    });
+  } else {
+    Swal.fire({
+      title: "No tiene productos en el carrito!",
+      icon: "warning"
+  });
+  }
 }
 
 
