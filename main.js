@@ -1,14 +1,7 @@
-const productos = [
-    { id: 1, nombre: "Teclado Redragon Kumara", precio: 40000, imagen: "./img/teclado.jpg"},
-    { id: 2, nombre: "Auriculares Hyperx", precio: 50000, imagen: "./img/auris.webp" },
-    { id: 3, nombre: "Mouse Logitech G305", precio: 25000, imagen: "./img/mouse.jpg" },
-    { id: 4, nombre: "Monitor Gigabyte", precio: 100000, imagen: "./img/monitor.jpg" }
-];
+const urlJSON = './db.json';
 
 const disponibles = ["teclado", "auriculares", "mouse", "monitor"];
-
 const productosContainer = document.getElementById("productosContainer");
-const productosDisponibles = document.getElementById("productosDisponibles");
 const carrito = document.getElementById("carrito");
 const carritoProductos = document.getElementById("carritoProductos");
 const totalCarrito = document.getElementById("totalCarrito");
@@ -18,7 +11,6 @@ const buscadorInput = document.getElementById("buscadorInput");
 const buscarBoton = document.getElementById("buscarBoton");
 const resultadosBusqueda = document.getElementById("resultadosBusqueda");
 
-
 let carritoEnLocalStorage = JSON.parse(localStorage.getItem("carrito")) || [];
 actualizarCarritoEnPantalla();
 
@@ -27,42 +19,69 @@ buscarBoton.addEventListener("click", function () {
     realizarBusqueda(terminoDeBusqueda);
 });
 
-mostrarProductos();
-
-function mostrarProductos() {
-    for (const producto of productos) {
-        const productoDiv = document.createElement("div");
-        productoDiv.innerHTML = `
-            <p>${producto.nombre}</p>
-            <img src="${producto.imagen}" alt="Imagen de ${producto.nombre}">
-            <br>
-            <b>$${producto.precio}</b>
-            <br>
-            <button class="agregarCarrito" data-producto='${JSON.stringify(producto)}'>Agregar al Carrito</button>
-            <hr />
-        `;
-        productosContainer.appendChild(productoDiv);
+async function obtenerProductos() {
+  try {
+    const response = await fetch(urlJSON);
+    if (!response.ok) {
+      throw new Error('No se pudo obtener la lista de productos');
     }
-    productosContainer.querySelectorAll(".agregarCarrito").forEach((boton) => {
-        boton.addEventListener("click", () => {
-            const producto = JSON.parse(boton.getAttribute("data-producto"));
-            agregarAlCarrito(producto);
-        });
+    const data = await response.json();
+    return data.productos;
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    return [];
+  }
+}
+
+async function iniciarApp() {
+  try {
+    const productos = await obtenerProductos();
+    if (productos.length > 0) {
+      mostrarProductos(productos);
+    } else {
+      console.error('No se encontraron productos');
+    }
+  } catch (error) {
+    console.error('Error al iniciar la aplicación:', error);
+  }
+}
+
+function mostrarProductos(productos) {
+  productos.forEach((producto) => {
+    const productoDiv = document.createElement("div");
+    productoDiv.innerHTML = `
+        <p>${producto.nombre}</p>
+        <img src="${producto.imagen}" alt="Imagen de ${producto.nombre}">
+        <br>
+        <b>$${producto.precio}</b>
+        <br>
+        <button class="agregarCarrito" data-producto='${JSON.stringify(producto)}'>Agregar al Carrito</button>
+        <hr />
+    `;
+    productosContainer.appendChild(productoDiv);
+  });
+
+  productosContainer.querySelectorAll(".agregarCarrito").forEach((boton) => {
+    boton.addEventListener("click", () => {
+        const producto = JSON.parse(boton.getAttribute("data-producto"));
+        agregarAlCarrito(producto);
     });
+  });
 }
 
 function agregarAlCarrito(producto) {
-    carritoEnLocalStorage.push(producto);
-    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
-    actualizarCarritoEnPantalla();
-    Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "El producto fue agregado al carrito!",
-        showConfirmButton: false,
-        timer: 1500
-      });;
+  carritoEnLocalStorage.push(producto);
+  localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+  actualizarCarritoEnPantalla();
+  Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "El producto fue agregado al carrito!",
+      showConfirmButton: false,
+      timer: 1500
+    });
 }
+
 
 function eliminarProductoDelCarrito(index) {
     Swal.fire({
@@ -120,12 +139,14 @@ function eliminarCarrito() {
   
 }
 
+
 function confirmarPago() {
-    alert(`¡Su pago por $${totalCarrito.textContent} ha sido confirmado! Gracias por tu compra.`);
-    carritoEnLocalStorage = [];
-    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
-    actualizarCarritoEnPantalla();
+  alert(`¡Su pago por $${totalCarrito.textContent} ha sido confirmado! Gracias por tu compra.`);
+  carritoEnLocalStorage = [];
+  localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+  actualizarCarritoEnPantalla();
 }
+
 
 function realizarBusqueda(termino) {
     resultadosBusqueda.innerHTML = "";
@@ -163,3 +184,5 @@ function actualizarCarritoEnPantalla() {
         });
     });
 }
+
+document.addEventListener('DOMContentLoaded', iniciarApp);
