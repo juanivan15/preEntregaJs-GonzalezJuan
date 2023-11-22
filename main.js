@@ -5,7 +5,7 @@ const productos = [
     { id: 4, nombre: "Monitor Gigabyte", precio: 100000, imagen: "./img/monitor.jpg" }
 ];
 
-const disponibles = ["Teclado", "Auriculares", "Mouse", "Monitor"];
+const disponibles = ["teclado", "auriculares", "mouse", "monitor"];
 
 const productosContainer = document.getElementById("productosContainer");
 const productosDisponibles = document.getElementById("productosDisponibles");
@@ -55,13 +55,34 @@ function agregarAlCarrito(producto) {
     carritoEnLocalStorage.push(producto);
     localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
     actualizarCarritoEnPantalla();
-    alert("Su producto fue agregado al carrito!");
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "El producto fue agregado al carrito!",
+        showConfirmButton: false,
+        timer: 1500
+      });;
 }
 
 function eliminarProductoDelCarrito(index) {
-    carritoEnLocalStorage.splice(index, 1);
-    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
-    actualizarCarritoEnPantalla();
+    Swal.fire({
+        title: "Estás seguro que quieres eliminar el producto del carrito?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, eliminar!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "El producto fue eliminado del carrito!",
+            icon: "success"
+          });
+          carritoEnLocalStorage.splice(index, 1);
+          localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+          actualizarCarritoEnPantalla();
+        }
+      });
 }
 
 eliminarCarritoButton.addEventListener("click", () => {
@@ -77,9 +98,26 @@ function mostrarCarrito() {
 }
 
 function eliminarCarrito() {
-    carritoEnLocalStorage = [];
-    localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
-    actualizarCarritoEnPantalla();
+    Swal.fire({
+        title: "Estás seguro que quieres eliminar el carrito?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, eliminar!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Eliminado!",
+            text: "El carrito fue vaciado.",
+            icon: "success"
+        });
+        carritoEnLocalStorage = [];
+        localStorage.setItem("carrito", JSON.stringify(carritoEnLocalStorage));
+        actualizarCarritoEnPantalla();
+        }
+      });
+  
 }
 
 function confirmarPago() {
